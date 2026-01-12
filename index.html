@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Membrane Potential 2: Complete Electrophysiology Quiz</title>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #303f9f;
+            --accent: #673ab7;
+            --neuron-color: #4caf50;
+            --ion-color: #2196f3;
+            --potential-color: #ff9800;
+            --channel-color: #e91e63;
+            --clinical-color: #009688;
+            --light: #f5f5f5;
+            --dark: #0d1b2a;
+            --success: #2e7d32;
+            --warning: #f57c00;
+            --danger: #c62828;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(rgba(26, 35, 126, 0.9), rgba(48, 63, 159, 0.85)), 
+                        url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=2070&auto=format&fit=crop') center/cover fixed;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .neuron-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3.5rem;
+            opacity: 0.2;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(90deg, #fff, #e0f7fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 900px;
+            margin: 0 auto 20px;
+            line-height: 1.8;
+        }
+        
+        .complexity-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--channel-color), var(--potential-color));
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .quiz-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .progress-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ion-color), var(--channel-color));
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        
+        .quiz-sections {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .quiz-sections {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .questions-section {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            max-height: 75vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .reference-section {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            max-height: 75vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .question {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: var(--ion-color);
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .question-number::before {
+            content: "Q";
+            background: linear-gradient(135deg, var(--primary), var(--ion-color));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .question-category {
+            background: linear-gradient(135deg, var(--neuron-color), var(--channel-color));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .question-text {
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid var(--potential-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .ion-note {
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            border-left: 5px solid var(--ion-color);
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .potential-note {
+            background: linear-gradient(to right, #fff3e0, #ffe0b2);
+            border-left: 5px solid var(--potential-color);
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .channel-note {
+            background: linear-gradient(to right, #fce4ec, #f8bbd9);
+            border-left: 5px solid var(--channel-color);
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .clinical-note {
+            background: linear-gradient(to right, #e0f2f1, #b2dfdb);
+            border-left: 5px solid var(--clinical-color);
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-style: italic;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .option {
+            padding: 20px 25px;
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1rem;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option::before {
+            content: attr(data-letter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 50px;
+            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--dark);
+            border-right: 2px solid #cbd5e0;
+            font-size: 1.2rem;
+        }
+        
+        .option-content {
+            margin-left: 60px;
+            flex: 1;
+        }
+        
+        .option:hover {
+            background-color: #f7fafc;
+            border-color: var(--ion-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .option.selected {
+            background-color: #e8f5e9;
+            border-color: var(--neuron-color);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+        }
+        
+        .option.correct {
+            background-color: #f1f8e9;
+            border-color: var(--success);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+        }
+        
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: var(--danger);
+            box-shadow: 0 4px 15px rgba(198, 40, 40, 0.2);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, var(--neuron-color), var(--primary));
+            color: white;
+            flex: 2;
+        }
+        
+        .reset-btn {
+            background: linear-gradient(135deg, #ffffff, #f5f5f5);
+            color: var(--dark);
+            flex: 1;
+            border: 2px solid #cbd5e0;
+        }
+        
+        .view-answers-btn {
+            background: linear-gradient(135deg, var(--ion-color), var(--accent));
+            color: white;
+            flex: 1;
+        }
+        
+        .results-section {
+            margin-top: 50px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            display: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .score-display {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .score-display::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: float 25s linear infinite;
+        }
+        
+        .score-value {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(90deg, #fff, #e0f7fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+        
+        .performance-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+            border-top: 5px solid var(--ion-color);
+        }
+        
+        .performance-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .performance-card.attempted {
+            border-top-color: var(--ion-color);
+        }
+        
+        .performance-card.correct {
+            border-top-color: var(--success);
+        }
+        
+        .performance-card.incorrect {
+            border-top-color: var(--danger);
+        }
+        
+        .performance-card.time {
+            border-top-color: var(--accent);
+        }
+        
+        .performance-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .detailed-answers {
+            margin-top: 50px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .answer-item {
+            padding: 25px;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--ion-color);
+            transition: transform 0.2s;
+        }
+        
+        .answer-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .answer-item.correct {
+            border-left-color: var(--success);
+            background: #f1f8e9;
+        }
+        
+        .answer-item.incorrect {
+            border-left-color: var(--danger);
+            background: #ffebee;
+        }
+        
+        .share-section {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .share-btn {
+            padding: 18px 25px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .twitter-share {
+            background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
+            color: white;
+        }
+        
+        .linkedin-share {
+            background: linear-gradient(135deg, #0077B5, #00669c);
+            color: white;
+        }
+        
+        .whatsapp-share {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+        }
+        
+        .copy-share {
+            background: linear-gradient(135deg, var(--neuron-color), var(--channel-color));
+            color: white;
+        }
+        
+        .reference-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reference-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .equation-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .timeline-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+        
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .timeline-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .step-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--neuron-color);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .quiz-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .score-value {
+                font-size: 3.5rem;
+            }
+            
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .share-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quiz-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .question-text {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+            
+            .option {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="neuron-icon">⚡🧠</div>
+            <h1>Action Membrane Potential 2: Complete Electrophysiology Quiz</h1>
+            <p class="subtitle">60 Comprehensive Questions on Resting & Action Potentials, Ionic Basis, Propagation, Clinical Correlations, and Advanced Neurophysiology</p>
+            <div class="complexity-badge">
+                <span>⚡ ADVANCED ELECTROPHYSIOLOGY</span>
+                <span>| 60 Questions | Medical & Biophysics Focus</span>
+            </div>
+        </header>
+        
+        <div class="quiz-stats">
+            <div class="stat-item">
+                <div class="stat-value">60</div>
+                <div class="stat-label">Total Questions</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Sections</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">45 min</div>
+                <div class="stat-label">Est. Duration</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">Expert</div>
+                <div class="stat-label">Level</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>Progress: <span id="answered-count">0</span>/60</span>
+                <span><span id="progress-percent">0</span>% Complete</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+        </div>
+        
+        <div class="quiz-sections">
+            <div class="questions-section" id="questions-section">
+                <!-- Questions will be dynamically inserted here -->
+            </div>
+            
+            <div class="reference-section" id="reference-section">
+                <h2>🧠 Quick Reference Guide</h2>
+                <div class="reference-box">
+                    <div class="reference-title">📚 Key Equations</div>
+                    <div class="equation-box">
+                        Nernst: E<sub>X</sub> = (RT/zF) ln([X]<sub>out</sub>/[X]<sub>in</sub>)
+                    </div>
+                    <div class="equation-box">
+                        Goldman-Hodgkin-Katz: V<sub>m</sub> = (RT/F) ln(ΣP<sub>cation</sub>[cation]<sub>out</sub> + ΣP<sub>anion</sub>[anion]<sub>in</sub> / ΣP<sub>cation</sub>[cation]<sub>in</sub> + ΣP<sub>anion</sub>[anion]<sub>out</sub>)
+                    </div>
+                    <div class="equation-box">
+                        Capacitance: Q = CV (C ≈ 1 µF/cm²)
+                    </div>
+                </div>
+                
+                <div class="reference-box">
+                    <div class="reference-title">⚡ Ion Concentrations (mM)</div>
+                    <p><strong>ECF:</strong> Na⁺ 145, K⁺ 4, Cl⁻ 110, Ca²⁺ 2.5</p>
+                    <p><strong>ICF:</strong> Na⁺ 12, K⁺ 140, Cl⁻ 4, Ca²⁺ 0.0001</p>
+                </div>
+                
+                <div class="reference-box">
+                    <div class="reference-title">⏱️ Action Potential Timeline</div>
+                    <p><strong>Phase 0:</strong> Rapid Na⁺ influx (upstroke)</p>
+                    <p><strong>Phase 1:</strong> Early repolarization (K⁺)</p>
+                    <p><strong>Phase 2:</strong> Plateau (Ca²⁺ in, K⁺ out)</p>
+                    <p><strong>Phase 3:</strong> Repolarization (K⁺)</p>
+                    <p><strong>Phase 4:</strong> Resting potential</p>
+                </div>
+                
+                <div class="reference-box">
+                    <div class="reference-title">💊 Clinical Correlations</div>
+                    <p><strong>Hyperkalemia:</strong> Resting potential less negative</p>
+                    <p><strong>Hypokalemia:</strong> Hyperpolarization</p>
+                    <p><strong>Local Anesthetics:</strong> Block Na⁺ channels</p>
+                    <p><strong>Channelopathies:</strong> Mutations in ion channels</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="reset-btn" id="reset-btn">
+                <span>🔄</span> Reset Quiz
+            </button>
+            <button class="view-answers-btn" id="view-answers-btn">
+                <span>📖</span> Show/Hide Answers
+            </button>
+            <button class="submit-btn" id="submit-btn">
+                <span>⚡</span> Submit & Calculate Score
+            </button>
+        </div>
+        
+        <div class="results-section" id="results-section">
+            <div class="score-display">
+                <h2>Your Electrophysiology Mastery Score</h2>
+                <div class="score-value" id="score-value">0/60</div>
+                <p>Action Potentials • Resting Membrane Potential • Ion Channels • Propagation • Clinical Applications</p>
+            </div>
+            
+            <div class="performance-grid">
+                <div class="performance-card attempted">
+                    <div class="performance-value" id="attempted-value">0</div>
+                    <div class="performance-label">Questions Attempted</div>
+                </div>
+                <div class="performance-card correct">
+                    <div class="performance-value" id="correct-value">0</div>
+                    <div class="performance-label">Correct Answers</div>
+                </div>
+                <div class="performance-card incorrect">
+                    <div class="performance-value" id="incorrect-value">0</div>
+                    <div class="performance-label">Incorrect Answers</div>
+                </div>
+                <div class="performance-card time">
+                    <div class="performance-value" id="accuracy-value">0%</div>
+                    <div class="performance-label">Accuracy Rate</div>
+                </div>
+            </div>
+            
+            <div class="detailed-answers" id="detailed-answers">
+                <!-- Detailed answers will appear here -->
+            </div>
+            
+            <div class="share-section">
+                <h3>Share Your Electrophysiology Results</h3>
+                <p>Challenge your colleagues with this comprehensive neurophysiology quiz!</p>
+                <div class="share-grid">
+                    <button class="share-btn twitter-share" id="share-twitter">
+                        <span>🐦</span> Twitter
+                    </button>
+                    <button class="share-btn linkedin-share" id="share-linkedin">
+                        <span>💼</span> LinkedIn
+                    </button>
+                    <button class="share-btn whatsapp-share" id="share-whatsapp">
+                        <span>📱</span> WhatsApp
+                    </button>
+                    <button class="share-btn copy-share" id="share-copy">
+                        <span>📋</span> Copy Results
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-title">🎯 Quiz Structure: 5 Comprehensive Sections</div>
+            <div class="timeline-steps">
+                <div class="timeline-step">
+                    <div class="step-number">1-12</div>
+                    <div>Resting Potential Basics</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">13-24</div>
+                    <div>Action Potential Generation</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">25-36</div>
+                    <div>Propagation & Conduction</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">37-48</div>
+                    <div>Clinical Applications</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">49-60</div>
+                    <div>Advanced Neurophysiology</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 60 Comprehensive Questions on Action Membrane Potential
+        const quizData = [
+            // Section 1: Resting Membrane Potential Basics (Questions 1-12)
+            {
+                question: "The resting membrane potential in a typical mammalian neuron is approximately:",
+                options: [
+                    "-70 mV (inside negative relative to outside)",
+                    "+40 mV (inside positive)",
+                    "0 mV (no potential difference)",
+                    "-90 mV (close to E_K)"
+                ],
+                correct: 0,
+                explanation: "Resting V_m ≈ -70 mV in neurons (-55 to -90 mV range). Determined primarily by K⁺ permeability (P_K >> P_Na). Close to but not equal to E_K (-90 mV) due to small Na⁺ leak.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The Nernst equation for potassium at 37°C (310 K) simplifies to:",
+                options: [
+                    "E_K = 61.5 log([K⁺]_out/[K⁺]_in) mV",
+                    "E_K = 26.7 ln([K⁺]_in/[K⁺]_out) mV",
+                    "E_K = 58 log([K⁺]_in/[K⁺]_out) mV",
+                    "E_K = 30 log([K⁺]_out/[K⁺]_in) mV"
+                ],
+                correct: 0,
+                explanation: "Nernst: E = (RT/zF) ln([out]/[in]). At 37°C: RT/F = 26.7 mV, 2.303RT/F = 61.5 mV. For K⁺: E_K = 61.5 log([K⁺]_out/[K⁺]_in). With [K⁺]_out=4 mM, [K⁺]_in=140 mM: E_K = -94 mV.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The Goldman-Hodgkin-Katz (GHK) equation includes:",
+                options: [
+                    "Relative permeabilities of all major ions (P_K, P_Na, P_Cl)",
+                    "Only potassium permeability",
+                    "Membrane capacitance and resistance",
+                    "Action potential duration"
+                ],
+                correct: 0,
+                explanation: "GHK: V_m = (RT/F) ln((P_K[K⁺]_out + P_Na[Na⁺]_out + P_Cl[Cl⁻]_in)/(P_K[K⁺]_in + P_Na[Na⁺]_in + P_Cl[Cl⁻]_out)). At rest: P_K:P_Na:P_Cl ≈ 1:0.04:0.45. Explains why V_m (-70 mV) is between E_K (-90 mV) and E_Na (+60 mV).",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The equilibrium potential for sodium (E_Na) with [Na⁺]_out=145 mM and [Na⁺]_in=12 mM is approximately:",
+                options: [
+                    "+60 mV",
+                    "-60 mV",
+                    "+120 mV",
+                    "0 mV"
+                ],
+                correct: 0,
+                explanation: "E_Na = 61.5 log(145/12) = +61.5 log(12.08) = +61.5 × 1.082 = +66.6 mV ≈ +60 mV. During action potential upstroke, V_m approaches E_Na.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The primary determinant of resting membrane potential is:",
+                options: [
+                    "High potassium permeability (P_K >> P_Na)",
+                    "High sodium permeability",
+                    "Chloride distribution",
+                    "Membrane capacitance"
+                ],
+                correct: 0,
+                explanation: "At rest, P_K ≈ 25× P_Na (P_K:P_Na ≈ 1:0.04). K⁺ leak channels keep V_m close to E_K. Na⁺/K⁺ ATPase maintains concentration gradients (3Na⁺ out, 2K⁺ in per ATP).",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The membrane time constant (τ) is given by:",
+                options: [
+                    "τ = R_m × C_m (typically 10-20 ms)",
+                    "τ = C_m / R_m",
+                    "τ = 1/(R_m C_m)",
+                    "τ = V_m / I_m"
+                ],
+                correct: 0,
+                explanation: "τ = R_m × C_m. For neuron: R_m ≈ 10,000 Ω·cm², C_m ≈ 1 µF/cm² → τ ≈ 10 ms. Determines how quickly V_m responds to current. Larger τ = slower response.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The length constant (λ) for axial current spread is:",
+                options: [
+                    "λ = √(r_m / r_i) where r_m = membrane resistance, r_i = internal resistance",
+                    "λ = r_m × r_i",
+                    "λ = 1/(r_m + r_i)",
+                    "λ = membrane thickness × conductivity"
+                ],
+                correct: 0,
+                explanation: "λ = √(r_m/r_i). Typical λ = 1-2 mm for neurons. Determines electrotonic spread. Larger diameter → smaller r_i → larger λ → better conduction. Myelination increases λ.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "Membrane capacitance per unit area (C_m) is approximately:",
+                options: [
+                    "1 µF/cm² (constant for all biological membranes)",
+                    "10 µF/cm²",
+                    "0.1 µF/cm²",
+                    "Variable with ion concentrations"
+                ],
+                correct: 0,
+                explanation: "C_m ≈ 1 µF/cm² for lipid bilayer. Derived from parallel plate capacitor: C = εε₀A/d. ε ≈ 3 (lipid), d ≈ 5 nm → C ≈ 0.5-1 µF/cm². Myelin reduces effective C_m.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The input resistance (R_input) of a typical neuron is approximately:",
+                options: [
+                    "10-100 MΩ",
+                    "1-10 kΩ",
+                    "1-10 Ω",
+                    "100-1000 GΩ"
+                ],
+                correct: 0,
+                explanation: "R_input ≈ 10-100 MΩ. R_input = V/I for small current injection. Smaller neurons have higher R_input. Important for synaptic integration.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The sodium-potassium pump (Na⁺/K⁺ ATPase) contributes directly to resting potential by:",
+                options: [
+                    "Generating -3 to -10 mV (electrogenic effect: 3Na⁺ out, 2K⁺ in)",
+                    "Generating +10 mV",
+                    "Having no direct effect on V_m",
+                    "Only maintaining concentration gradients"
+                ],
+                correct: 0,
+                explanation: "Na⁺/K⁺ ATPase is electrogenic: 3Na⁺ out, 2K⁺ in per ATP → net outward current → hyperpolarization (-3 to -10 mV). Main role: maintain gradients. Ouabain inhibits pump → depolarization.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The chloride equilibrium potential (E_Cl) in most neurons is approximately:",
+                options: [
+                    "-70 mV (close to resting V_m)",
+                    "+60 mV",
+                    "-90 mV",
+                    "0 mV"
+                ],
+                correct: 0,
+                explanation: "With [Cl⁻]_out ≈ 110 mM, [Cl⁻]_in ≈ 4-10 mM: E_Cl = -61.5 log(110/7) ≈ -70 mV. Cl⁻ often passively distributed. In some neurons, active Cl⁻ transport creates E_Cl different from V_m.",
+                category: "Resting Potential Basics"
+            },
+            {
+                question: "The resting membrane potential would become more negative if:",
+                options: [
+                    "Extracellular potassium concentration decreases",
+                    "Extracellular sodium increases",
+                    "Potassium permeability decreases",
+                    "Chloride permeability increases"
+                ],
+                correct: 0,
+                explanation: "Decreasing [K⁺]_out makes E_K more negative (E_K = 61.5 log([K⁺]_out/[K⁺]_in)). Since V_m follows E_K, hyperpolarization occurs. Clinical: hypokalemia causes hyperpolarization, reduced excitability.",
+                category: "Resting Potential Basics"
+            },
+            // Section 2: Action Potential Generation (Questions 13-24)
+            {
+                question: "The threshold potential for action potential initiation in neurons is typically:",
+                options: [
+                    "-55 to -50 mV (10-15 mV depolarized from rest)",
+                    "-70 mV (resting potential)",
+                    "-40 mV",
+                    "-80 mV"
+                ],
+                correct: 0,
+                explanation: "Threshold ≈ -55 mV. Voltage where inward Na⁺ current > outward K⁺ current → regenerative depolarization. All-or-none response. Subthreshold stimuli produce graded responses.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "During the upstroke (phase 0) of the action potential:",
+                options: [
+                    "Voltage-gated Na⁺ channels open rapidly (activation gates m open)",
+                    "K⁺ channels open",
+                    "Ca²⁺ channels open",
+                    "Cl⁻ channels open"
+                ],
+                correct: 0,
+                explanation: "Upstroke: Na⁺ channels open within 0.1 ms. m gates open (activation), h gates still open (not yet inactivated). V_m approaches E_Na (+60 mV). Peak overshoot ≈ +30 to +40 mV.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "The absolute refractory period is caused by:",
+                options: [
+                    "Inactivation of Na⁺ channels (h gates closed)",
+                    "Opening of K⁺ channels",
+                    "Na⁺ channel activation",
+                    "Membrane hyperpolarization"
+                ],
+                correct: 0,
+                explanation: "Absolute refractory: Na⁺ channels inactivated (h gates closed) → cannot reopen until repolarization. Lasts ~1 ms. Ensures one-way propagation and limits frequency.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "The relative refractory period is characterized by:",
+                options: [
+                    "K⁺ channels still open, requiring stronger stimulus",
+                    "Na⁺ channels completely recovered",
+                    "Enhanced excitability",
+                    "Lower threshold"
+                ],
+                correct: 0,
+                explanation: "Relative refractory: K⁺ channels still open (delayed rectifier), membrane hyperpolarized. Stronger stimulus needed. Lasts several ms. Limits maximum firing rate.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "The Hodgkin-Huxley model describes the action potential using:",
+                options: [
+                    "Three variables: m (Na⁺ activation), h (Na⁺ inactivation), n (K⁺ activation)",
+                    "Only Na⁺ conductance",
+                    "Calcium currents only",
+                    "Simple resistor-capacitor circuit"
+                ],
+                correct: 0,
+                explanation: "Hodgkin-Huxley (1952): I = C_m dV/dt + g_Na m³h (V-E_Na) + g_K n⁴ (V-E_K) + g_L (V-E_L). Nobel Prize 1963. m, h, n follow voltage-dependent kinetics.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "The afterhyperpolarization (AHP) is due to:",
+                options: [
+                    "Continued K⁺ efflux through delayed rectifier channels",
+                    "Na⁺ influx",
+                    "Cl⁻ influx",
+                    "Ca²⁺ activated K⁺ channels"
+                ],
+                correct: 0,
+                explanation: "AHP: V_m becomes more negative than rest (-75 to -80 mV). Due to slow closing of K⁺ channels. Limits firing rate. Medium/slow AHP involves Ca²⁺-activated K⁺ channels.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "Voltage-gated sodium channels have:",
+                options: [
+                    "Both activation (m) and inactivation (h) gates",
+                    "Only activation gates",
+                    "Only inactivation gates",
+                    "No gates, always open"
+                ],
+                correct: 0,
+                explanation: "Na⁺ channels: m gates (activation) open rapidly with depolarization; h gates (inactivation) close slowly (1-2 ms). At rest: m closed, h open. During AP: m open, then h closes (inactivation).",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "Tetrodotoxin (TTX) blocks action potentials by:",
+                options: [
+                    "Binding to voltage-gated Na⁺ channels (external pore)",
+                    "Blocking K⁺ channels",
+                    "Inhibiting Na⁺/K⁺ ATPase",
+                    "Blocking Ca²⁺ channels"
+                ],
+                correct: 0,
+                explanation: "TTX (from puffer fish) binds to site 1 of Na⁺ channel α subunit. Blocks pore externally. IC₅₀ ≈ 10 nM. Used to isolate other currents. Saxitoxin similar mechanism.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "Tetraethylammonium (TEA) blocks:",
+                options: [
+                    "Voltage-gated K⁺ channels (internal binding)",
+                    "Na⁺ channels",
+                    "Cl⁻ channels",
+                    "Gap junctions"
+                ],
+                correct: 0,
+                explanation: "TEA blocks K⁺ channels internally. Prolongs action potential duration. Distinguishes K⁺ currents. 4-aminopyridine (4-AP) blocks K⁺ channels differently (inactivation).",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "The strength-duration curve shows:",
+                options: [
+                    "Minimum current × time product needed for excitation",
+                    "Only threshold voltage",
+                    "Refractory period duration",
+                    "Conduction velocity"
+                ],
+                correct: 0,
+                explanation: "Strength-duration: I = I_rh(1 + τ/τ). Rheobase (I_rh) = minimum current for infinite duration. Chronaxie (τ) = duration at 2× rheobase. τ ≈ membrane time constant.",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "The 'all-or-none' principle means:",
+                options: [
+                    "Action potential amplitude is independent of stimulus strength if threshold is reached",
+                    "Graded responses are possible",
+                    "Subthreshold stimuli can elicit small APs",
+                    "AP size depends on stimulus duration"
+                ],
+                correct: 0,
+                explanation: "All-or-none: once threshold reached, AP proceeds to full amplitude (+30-40 mV overshoot). Due to regenerative Na⁺ influx. Contrast with graded potentials (synaptic, receptor).",
+                category: "Action Potential Generation"
+            },
+            {
+                question: "Local anesthetics like lidocaine work by:",
+                options: [
+                    "Blocking Na⁺ channels from inside (use-dependent block)",
+                    "Blocking K⁺ channels",
+                    "Hyperpolarizing membranes",
+                    "Activating Cl⁻ channels"
+                ],
+                correct: 0,
+                explanation: "Local anesthetics bind to intracellular site of Na⁺ channels. Use-dependent: more effective with high frequency firing. Also block voltage-gated K⁺ and Ca²⁺ channels at higher concentrations.",
+                category: "Action Potential Generation"
+            },
+            // Section 3: Propagation & Conduction (Questions 25-36)
+            {
+                question: "Conduction velocity in unmyelinated axons is proportional to:",
+                options: [
+                    "√(diameter) (larger diameter = faster conduction)",
+                    "Diameter squared",
+                    "1/√(diameter)",
+                    "Independent of diameter"
+                ],
+                correct: 0,
+                explanation: "Unmyelinated: velocity ∝ √(diameter). Larger diameter → lower axial resistance (r_i ∝ 1/d²) → larger λ → faster conduction. Typical: 0.5-2 m/s for 1 µm axon.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "Saltatory conduction in myelinated axons increases velocity by:",
+                options: [
+                    "AP jumps between nodes of Ranvier (20-100× faster)",
+                    "Continuous propagation along axon",
+                    "Increasing membrane capacitance",
+                    "Decreasing axon diameter"
+                ],
+                correct: 0,
+                explanation: "Saltatory: AP regenerates at nodes. Myelin increases R_m 100×, decreases C_m 100×. Velocity ∝ diameter. For 10 µm myelinated axon: 50-100 m/s. Multiple sclerosis demyelination slows conduction.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "The space constant (λ) for a myelinated axon is approximately:",
+                options: [
+                    "1-2 mm (compared to 0.1-1 mm for unmyelinated)",
+                    "0.1 mm",
+                    "10 mm",
+                    "Same as unmyelinated"
+                ],
+                correct: 0,
+                explanation: "Myelinated: λ = √(r_m/r_i) where r_m is much larger → λ = 1-2 mm. Allows depolarization to spread to next node (internode 100-200× λ).",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "The safety factor for conduction is:",
+                options: [
+                    "Ratio of depolarizing current to current needed for excitation (typically 5-10)",
+                    "Refractory period duration",
+                    "Membrane resistance",
+                    "Threshold voltage"
+                ],
+                correct: 0,
+                explanation: "Safety factor = (current generated)/(current needed to reach threshold). Typically 5-10. Ensures reliable propagation. Reduced in demyelination, causing conduction block.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "Anodal block occurs when:",
+                options: [
+                    "Hyperpolarization at anode blocks AP propagation",
+                    "Depolarization blocks conduction",
+                    "Threshold is lowered",
+                    "Refractory period shortened"
+                ],
+                correct: 0,
+                explanation: "Anodal block: extracellular anode hyperpolarizes membrane → Na⁺ channels inactivated → conduction block. Used in functional electrical stimulation. Cathodal stimulation depolarizes.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "The conduction velocity in cardiac Purkinje fibers is:",
+                options: [
+                    "2-4 m/s (fastest in heart)",
+                    "0.01-0.1 m/s",
+                    "Same as skeletal muscle",
+                    "10-20 m/s"
+                ],
+                correct: 0,
+                explanation: "Purkinje fibers: 2-4 m/s (due to large diameter, gap junctions). Ventricular muscle: 0.3-0.4 m/s. Atrial muscle: 0.8-1.0 m/s. SA node: 0.05 m/s.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "Ephaptic conduction refers to:",
+                options: [
+                    "Electrical interaction between adjacent axons (no synapses)",
+                    "Chemical synaptic transmission",
+                    "Gap junction communication",
+                    "Normal saltatory conduction"
+                ],
+                correct: 0,
+                explanation: "Ephaptic: extracellular current from active axon influences neighboring axon. Can synchronize activity. Rare in CNS. More common in unmyelinated fibers, retina.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "The cable equation describes:",
+                options: [
+                    "∂²V/∂x² = (r_m + r_i)∂V/∂t + V/λ²",
+                    "Only action potential shape",
+                    "Synaptic transmission",
+                    "Ion channel kinetics"
+                ],
+                correct: 0,
+                explanation: "Cable equation: λ²∂²V/∂x² = τ∂V/∂t + V. Derived from electrical cable theory. Predicts electrotonic spread. Solutions: exponentially decaying with distance.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "In demyelinating diseases, conduction fails because:",
+                options: [
+                    "Current loss through exposed membrane between nodes",
+                    "Na⁺ channels disappear",
+                    "K⁺ channels increase",
+                    "Axon diameter decreases"
+                ],
+                correct: 0,
+                explanation: "Demyelination: exposes high capacitance membrane → current shunts → fails to depolarize next node. Conduction block or slowing. Temperature sensitivity (Uhthoff's phenomenon).",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "The refractory period limits maximum firing frequency to approximately:",
+                options: [
+                    "500-1000 Hz (absolute refractory 1-2 ms)",
+                    "50-100 Hz",
+                    "10-20 Hz",
+                    "2000-5000 Hz"
+                ],
+                correct: 0,
+                explanation: "Absolute refractory 1-2 ms → max frequency 500-1000 Hz. Most neurons fire <100 Hz. Relative refractory further limits rate. Auditory neurons can follow >1 kHz.",
+                category: "Propagation & Conduction"
+            },
+            {
+                question: "Orthodromic conduction is:",
+                options: [
+                    "AP propagation in normal direction (soma → axon terminal)",
+                    "Reverse direction propagation",
+                    "Bidirectional propagation",
+                    "Conduction block"
+                ],
+                correct: 0,
+                explanation: "Orthodromic = normal direction. Antidromic = reverse direction (can occur experimentally). Synapses prevent antidromic propagation in CNS. In sensory axons, both possible.",
+                category:Propagation & Conduction"
+            },
+            {
+                question: "The H factor in conduction velocity is:",
+                options: [
+                    "Velocity increases 1.5-2× for 10°C temperature rise (Q₁₀ ≈ 1.5)",
+                    "Velocity decreases with temperature",
+                    "Independent of temperature",
+                    "Only affects myelinated fibers"
+                ],
+                correct: 0,
+                explanation: "Q₁₀ ≈ 1.5 for conduction velocity. Channel kinetics faster with temperature. Clinical: MS symptoms worsen with fever (Uhthoff's). Cold slows conduction.",
+                category: "Propagation & Conduction"
+            },
+            // Section 4: Clinical Applications (Questions 37-48)
+            {
+                question: "Hyperkalemia (high extracellular K⁺) causes:",
+                options: [
+                    "Depolarization of resting potential, reduced excitability",
+                    "Hyperpolarization, increased excitability",
+                    "No change in resting potential",
+                    "Increased action potential amplitude"
+                ],
+                correct: 0,
+                explanation: "[K⁺]_out ↑ → E_K less negative → depolarization. Na⁺ channels inactivated at -60 to -55 mV → reduced excitability. Cardiac: peaked T waves, wide QRS, arrhythmias.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Hypokalemia (low extracellular K⁺) causes:",
+                options: [
+                    "Hyperpolarization, reduced excitability",
+                    "Depolarization",
+                    "Increased Na⁺ channel availability",
+                    "Shorter action potentials"
+                ],
+                correct: 0,
+                explanation: "[K⁺]_out ↓ → E_K more negative → hyperpolarization. Further from threshold → reduced excitability. Cardiac: flattened T waves, U waves, arrhythmias.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Local anesthetic toxicity primarily affects:",
+                options: [
+                    "Cardiac Na⁺ channels → arrhythmias, CNS → seizures",
+                    "Only peripheral nerves",
+                    "K⁺ channels only",
+                    "Ca²⁺ channels only"
+                ],
+                correct: 0,
+                explanation: "Systemic toxicity: 1) CNS: seizures (Na⁺ channel block in inhibitory neurons). 2) Cardiac: prolonged QRS, arrhythmias, negative inotropy. Treatment: lipid emulsion.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Lambert-Eaton myasthenic syndrome involves:",
+                options: [
+                    "Autoantibodies against presynaptic Ca²⁺ channels",
+                    "Postsynaptic ACh receptor antibodies",
+                    "Na⁺ channel mutations",
+                    "K⁺ channel antibodies"
+                ],
+                correct: 0,
+                explanation: "LEMS: anti-P/Q type Ca²⁺ channel antibodies → reduced ACh release. Associated with small cell lung cancer. Treatment: 3,4-DAP (K⁺ channel blocker). Contrast with myasthenia gravis (AChR antibodies).",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Periodic paralysis syndromes involve mutations in:",
+                options: [
+                    "Voltage-gated Na⁺ or Ca²⁺ channels",
+                    "Only K⁺ channels",
+                    "Cl⁻ channels",
+                    "Gap junctions"
+                ],
+                correct: 0,
+                explanation: "Hypokalemic periodic paralysis: Ca²⁺ channel mutations. Hyperkalemic periodic paralysis: Na⁺ channel mutations. Paramyotonia congenita: Na⁺ channel mutations. Triggered by K⁺ changes, exercise, cold.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Long QT syndrome can be caused by:",
+                options: [
+                    "Na⁺ channel gain-of-function (LQT3) or K⁺ channel loss-of-function",
+                    "Only Ca²⁺ channel mutations",
+                    "Cl⁻ channel mutations",
+                    "Gap junction mutations"
+                ],
+                correct: 0,
+                explanation: "LQT1: KCNQ1 (I_Ks) loss. LQT2: HERG (I_Kr) loss. LQT3: SCN5A (Na⁺ channel) gain → persistent late Na⁺ current. Risk of torsades de pointes. Treatment: β-blockers, mexiletine for LQT3.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Brugada syndrome involves:",
+                options: [
+                    "Na⁺ channel loss-of-function, ST elevation V1-V3, ventricular fibrillation",
+                    "K⁺ channel gain-of-function",
+                    "Ca²⁺ channel mutations only",
+                    "Long QT interval"
+                ],
+                correct: 0,
+                explanation: "Brugada: SCN5A mutations → loss of Na⁺ channel function. Right precordial ST elevation. Risk of sudden death. Triggered by fever, drugs. Treatment: ICD.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Multiple sclerosis symptoms worsen with fever due to:",
+                options: [
+                    "Temperature-dependent conduction block in demyelinated fibers",
+                    "Increased immune activity only",
+                    "Blood-brain barrier breakdown",
+                    "Neuron death"
+                ],
+                correct: 0,
+                explanation: "Uhthoff's phenomenon: conduction block in demyelinated axons when temperature rises. Q₁₀ ≈ 1.5 for conduction. Cooling improves symptoms. Important for diagnosis.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "The mechanism of phenytoin in epilepsy is:",
+                options: [
+                    "Use-dependent Na⁺ channel block, prolongs inactivation",
+                    "GABA enhancement",
+                    "Glutamate blockade",
+                    "Ca²⁺ channel block"
+                ],
+                correct: 0,
+                explanation: "Phenytoin: binds to inactivated Na⁺ channels → prolongs refractory period. Use-dependent: more effective at high frequency. Therapeutic range 10-20 µg/mL. Also blocks Ca²⁺ channels.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Tetany in hypocalcemia results from:",
+                options: [
+                    "Increased neuronal excitability due to reduced screening of negative charges",
+                    "Decreased excitability",
+                    "Muscle weakness",
+                    "Na⁺ channel inactivation"
+                ],
+                correct: 0,
+                explanation: "Low Ca²⁺ reduces screening of negative membrane surface charges → channels open at more negative potentials → hyperexcitability. Chvostek's sign, Trousseau's sign. Cardiac: prolonged QT.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "Myotonia congenita involves:",
+                options: [
+                    "ClC-1 Cl⁻ channel mutations → reduced Cl⁻ conductance",
+                    "Na⁺ channel mutations",
+                    "K⁺ channel mutations",
+                    "Ca²⁺ channel mutations"
+                ],
+                correct: 0,
+                explanation: "Myotonia: delayed muscle relaxation after contraction. Thomsen/Becker disease: CLCN1 mutations → reduced Cl⁻ conductance (normally 70% of muscle conductance) → hyperexcitability. Treatment: mexiletine.",
+                category: "Clinical Applications"
+            },
+            {
+                question: "The effect of hypermagnesemia on neuromuscular function is:",
+                options: [
+                    "Reduced ACh release, presynaptic block (like botulinum)",
+                    "Increased ACh release",
+                    "Postsynaptic blockade",
+                    "Muscle hyperexcitability"
+                ],
+                correct: 0,
+                explanation: "High Mg²⁺ competes with Ca²⁺ at presynaptic terminal → reduced ACh release → weakness, respiratory depression. Treatment: Ca²⁺ gluconate. Used in eclampsia, tocolysis.",
+                category: "Clinical Applications"
+            },
+            // Section 5: Advanced Neurophysiology (Questions 49-60)
+            {
+                question: "The gating current of Na⁺ channels represents:",
+                options: [
+                    "Movement of charged residues within channel protein during voltage sensing",
+                    "Ion flow through channel",
+                    "Channel inactivation",
+                    "ATP hydrolysis"
+                ],
+                correct: 0,
+                explanation: "Gating current: small (nA) transient current from movement of S4 charges during activation/inactivation. Precedes ionic current. Measured with non-permeant ions, patch clamp.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The Cole-Moore effect describes:",
+                options: [
+                    "Delay in K⁺ channel opening after hyperpolarizing prepulse",
+                    "Na⁺ channel inactivation",
+                    "Cl⁻ channel gating",
+                    "Ca²⁺ channel modulation"
+                ],
+                correct: 0,
+                explanation: "Cole-Moore: hyperpolarization delays K⁺ channel opening (n gates start more closed). Shifts activation curve. Important for spike timing, frequency adaptation.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The GHK current equation for an ion is:",
+                options: [
+                    "I_X = P_X z²F²V/RT × ( [X]_in - [X]_out e^{-zFV/RT} ) / (1 - e^{-zFV/RT} )",
+                    "I_X = g_X (V - E_X) (linear approximation)",
+                    "I_X = constant",
+                    "I_X = C_m dV/dt"
+                ],
+                correct: 0,
+                explanation: "GHK current equation: accounts for asymmetric concentrations, voltage-dependent driving force. Reduces to ohmic (g_X(V-E_X)) when concentrations equal or V near E_X.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The instantaneous I-V relationship of Na⁺ channels shows:",
+                options: [
+                    "Rectification (inward at negative V, outward at positive V)",
+                    "Ohmic at all voltages",
+                    "Only inward current",
+                    "Only outward current"
+                ],
+                correct: 0,
+                explanation: "Instantaneous I-V: measures current immediately after channel opening. Na⁺ channels: inward below E_Na (+60 mV), outward above. Demonstrates changing driving force.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The 'window current' in Na⁺ channels refers to:",
+                options: [
+                    "Small persistent current when activation and inactivation curves overlap",
+                    "Complete channel closure",
+                    "Only activation current",
+                    "K⁺ channel current"
+                ],
+                correct: 0,
+                explanation: "Window current: overlap of m∞ and h∞ curves around -50 to -40 mV → small fraction of Na⁺ channels always open. Important in pacemaker activity, some arrhythmias.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The reversal potential for a non-selective cation channel is:",
+                options: [
+                    "Between E_Na and E_K (around 0 mV)",
+                    "Equal to E_Na",
+                    "Equal to E_K",
+                    "Always negative"
+                ],
+                correct: 0,
+                explanation: "Non-selective cation channels (e.g., NMDA, TRP): P_Na ≈ P_K ≈ P_Ca → reversal potential ≈ 0 mV. Important in synaptic transmission, sensory transduction.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The difference between patch clamp and voltage clamp is:",
+                options: [
+                    "Patch clamp can measure single channels, voltage clamp measures whole cell",
+                    "Only voltage clamp exists",
+                    "Patch clamp measures only whole cell",
+                    "No difference"
+                ],
+                correct: 0,
+                explanation: "Voltage clamp (Hodgkin-Huxley): controls V, measures I. Patch clamp (Neher & Sakmann, Nobel 1991): cell-attached, whole-cell, inside-out, outside-out configurations. Single-channel resolution.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The Goldman field effect on channel gating refers to:",
+                options: [
+                    "Voltage sensor movement through membrane electric field",
+                    "Concentration gradient effect",
+                    "Only ionic current",
+                    "Channel phosphorylation"
+                ],
+                correct: 0,
+                explanation: "Goldman-Hodgkin-Katz field effect: voltage sensor (S4 helix) moves through membrane field, experiencing fraction of transmembrane voltage. Determines voltage dependence of gating.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The Cole equation for membrane impedance is:",
+                options: [
+                    "Z(ω) = R/(1 + jωτ) where τ = RC",
+                    "Z(ω) = constant",
+                    "Z(ω) = 1/jωC",
+                    "Z(ω) = R"
+                ],
+                correct: 0,
+                explanation: "Cole equation: impedance of parallel RC circuit. Z = R/(1 + jωRC). Used to analyze membrane properties via impedance spectroscopy. Real/imaginary plots = semicircle.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The difference between Type I and Type II neural excitability is:",
+                options: [
+                    "Type I: continuous frequency-current curve, Type II: discontinuous",
+                    "Only threshold differences",
+                    "Only channel types",
+                    "No difference"
+                ],
+                correct: 0,
+                explanation: "Type I (integrators): f-I curve continuous, can fire at arbitrarily low frequencies. Type II (resonators): f-I curve discontinuous, minimal frequency > 0. Different dynamics, bifurcations.",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The Morris-Lecar model simplifies excitability to:",
+                options: [
+                    "Two variables: V (membrane potential) and w (K⁺ activation)",
+                    "Only Na⁺ current",
+                    "Three variables like HH",
+                    "Only leak current"
+                ],
+                correct: 0,
+                explanation: "Morris-Lecar (1981): 2D model with Ca²⁺ (or Na⁺) and K⁺ currents. Exhibits Type I/II excitability. Used for bifurcation analysis. dV/dt = I - g_Ca m_∞(V)(V-E_Ca) - g_K w(V-E_K) - g_L(V-E_L).",
+                category: "Advanced Neurophysiology"
+            },
+            {
+                question: "The FitzHugh-Nagumo model is:",
+                options: [
+                    "Simplified excitable system: ε dv/dt = v - v³/3 - w + I, dw/dt = v + a - bw",
+                    "Detailed ion channel model",
+                    "Only membrane capacitance",
+                    "Synaptic model"
+                ],
+                correct: 0,
+                explanation: "FitzHugh-Nagumo (1961): simplification of HH to 2 variables. v = excitation variable, w = recovery variable. Exhibits excitability, limit cycles. Used in theoretical neuroscience.",
+                category: "Advanced Neurophysiology"
+            }
+        ];
+
+        // Initialize the quiz
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionsSection = document.getElementById('questions-section');
+            const referenceSection = document.getElementById('reference-section');
+            const submitBtn = document.getElementById('submit-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const viewAnswersBtn = document.getElementById('view-answers-btn');
+            const resultsSection = document.getElementById('results-section');
+            const scoreValue = document.getElementById('score-value');
+            const attemptedValue = document.getElementById('attempted-value');
+            const correctValue = document.getElementById('correct-value');
+            const incorrectValue = document.getElementById('incorrect-value');
+            const accuracyValue = document.getElementById('accuracy-value');
+            const detailedAnswers = document.getElementById('detailed-answers');
+            const progressBar = document.getElementById('progress-bar');
+            const answeredCount = document.getElementById('answered-count');
+            const progressPercent = document.getElementById('progress-percent');
+            
+            let userAnswers = Array(quizData.length).fill(null);
+            let startTime = new Date();
+            
+            // Create question elements
+            quizData.forEach((questionData, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.id = `question-${index}`;
+                
+                let categoryClass = '';
+                let categoryNote = '';
+                
+                switch(questionData.category) {
+                    case 'Resting Potential Basics':
+                        categoryClass = 'ion-note';
+                        categoryNote = 'Ionic Basis & Resting Potential';
+                        break;
+                    case 'Action Potential Generation':
+                        categoryClass = 'potential-note';
+                        categoryNote = 'Action Potential Dynamics';
+                        break;
+                    case 'Propagation & Conduction':
+                        categoryClass = 'channel-note';
+                        categoryNote = 'Propagation & Conduction';
+                        break;
+                    case 'Clinical Applications':
+                        categoryClass = 'clinical-note';
+                        categoryNote = 'Clinical Correlations';
+                        break;
+                    case 'Advanced Neurophysiology':
+                        categoryClass = 'ion-note';
+                        categoryNote = 'Advanced Concepts';
+                        break;
+                }
+                
+                questionElement.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">${index + 1}</div>
+                        <div class="question-category">${questionData.category}</div>
+                    </div>
+                    <div class="question-text">${questionData.question}</div>
+                    <div class="${categoryClass}">
+                        <strong>${categoryNote}:</strong> Question ${index + 1} of 60
+                    </div>
+                    <div class="options">
+                        ${questionData.options.map((option, optionIndex) => `
+                            <div class="option" data-question="${index}" data-option="${optionIndex}" data-letter="${String.fromCharCode(65 + optionIndex)}">
+                                <div class="option-content">${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                questionsSection.appendChild(questionElement);
+            });
+            
+            // Update progress
+            function updateProgress() {
+                const answered = userAnswers.filter(answer => answer !== null).length;
+                const progress = (answered / quizData.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                answeredCount.textContent = answered;
+                progressPercent.textContent = Math.round(progress);
+            }
+            
+            // Add event listeners to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.getAttribute('data-question'));
+                    const optionIndex = parseInt(this.getAttribute('data-option'));
+                    
+                    // Remove selected class from all options in this question
+                    const questionOptions = document.querySelectorAll(`.option[data-question="${questionIndex}"]`);
+                    questionOptions.forEach(opt => {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Store user's answer
+                    userAnswers[questionIndex] = optionIndex;
+                    
+                    // Update progress
+                    updateProgress();
+                });
+            });
+            
+            // Submit button event listener
+            submitBtn.addEventListener('click', function() {
+                let score = 0;
+                let attempted = 0;
+                let correct = 0;
+                let incorrect = 0;
+                
+                // Calculate time taken
+                const endTime = new Date();
+                const timeTaken = Math.round((endTime - startTime) / 1000); // seconds
+                
+                // Clear previous detailed answers
+                detailedAnswers.innerHTML = '';
+                
+                // Evaluate answers
+                quizData.forEach((questionData, index) => {
+                    const userAnswer = userAnswers[index];
+                    const correctAnswer = questionData.correct;
+                    const questionOptions = document.querySelectorAll(`.option[data-question="${index}"]`);
+                    
+                    if (userAnswer !== null) {
+                        attempted++;
+                        
+                        // Mark correct/incorrect answers
+                        questionOptions.forEach((option, optionIndex) => {
+                            if (optionIndex === correctAnswer) {
+                                option.classList.add('correct');
+                            } else if (optionIndex === userAnswer && userAnswer !== correctAnswer) {
+                                option.classList.add('incorrect');
+                            }
+                        });
+                        
+                        if (userAnswer === correctAnswer) {
+                            score++;
+                            correct++;
+                        } else {
+                            incorrect++;
+                        }
+                        
+                        // Create detailed answer element
+                        const detailedAnswer = document.createElement('div');
+                        detailedAnswer.className = `answer-item ${userAnswer === correctAnswer ? 'correct' : 'incorrect'}`;
+                        const userAnswerLetter = userAnswer !== null ? String.fromCharCode(65 + userAnswer) : '?';
+                        const userAnswerText = userAnswer !== null ? questionData.options[userAnswer] : 'Not selected';
+                        detailedAnswer.innerHTML = `
+                            <strong>Q${index + 1} (${questionData.category}):</strong> ${questionData.question}<br>
+                            <span style="color: ${userAnswer === correctAnswer ? '#2e7d32' : '#c62828'}; font-weight: bold;">
+                                Your answer: ${userAnswerLetter}. ${userAnswerText}
+                            </span><br>
+                            <span style="color: #2e7d32; font-weight: bold;">
+                                Correct: ${String.fromCharCode(65 + correctAnswer)}. ${questionData.options[correctAnswer]}
+                            </span><br>
+                            <div class="clinical-note" style="margin-top: 10px;">${questionData.explanation}</div>
+                        `;
+                        detailedAnswers.appendChild(detailedAnswer);
+                    } else {
+                        // Create detailed answer for unattempted question
+                        const detailedAnswer = document.createElement('div');
+                        detailedAnswer.className = 'answer-item';
+                        detailedAnswer.innerHTML = `
+                            <strong>Q${index + 1} (${questionData.category}):</strong> ${questionData.question}<br>
+                            <span style="color: #c62828; font-weight: bold;">Your answer: Not attempted</span><br>
+                            <span style="color: #2e7d32; font-weight: bold;">
+                                Correct: ${String.fromCharCode(65 + correctAnswer)}. ${questionData.options[correctAnswer]}
+                            </span><br>
+                            <div class="clinical-note" style="margin-top: 10px;">${questionData.explanation}</div>
+                        `;
+                        detailedAnswers.appendChild(detailedAnswer);
+                    }
+                });
+                
+                // Update score and stats
+                scoreValue.textContent = `${score}/${quizData.length}`;
+                attemptedValue.textContent = attempted;
+                correctValue.textContent = correct;
+                incorrectValue.textContent = incorrect;
+                const accuracy = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+                accuracyValue.textContent = `${accuracy}%`;
+                
+                // Show results section
+                resultsSection.style.display = 'block';
+                
+                // Scroll to results
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // Add time information
+                const timeElement = document.createElement('div');
+                timeElement.className = 'clinical-note';
+                timeElement.innerHTML = `<strong>Time taken:</strong> ${timeTaken} seconds`;
+                detailedAnswers.prepend(timeElement);
+            });
+            
+            // Reset button event listener
+            resetBtn.addEventListener('click', function() {
+                userAnswers = Array(quizData.length).fill(null);
+                startTime = new Date();
+                
+                // Clear all selections
+                document.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // Hide results section
+                resultsSection.style.display = 'none';
+                
+                // Reset progress
+                progressBar.style.width = '0%';
+                answeredCount.textContent = '0';
+                progressPercent.textContent = '0';
+                
+                // Clear detailed answers
+                detailedAnswers.innerHTML = '';
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // View answers button (toggle reference section)
+            viewAnswersBtn.addEventListener('click', function() {
+                if (referenceSection.style.display === 'none') {
+                    referenceSection.style.display = 'block';
+                    this.innerHTML = '<span>📖</span> Hide Reference';
+                } else {
+                    referenceSection.style.display = 'none';
+                    this.innerHTML = '<span>📖</span> Show Reference';
+                }
+            });
+            
+            // Share buttons functionality
+            document.getElementById('share-twitter')?.addEventListener('click', function() {
+                const score = document.getElementById('score-value').textContent;
+                const text = `I scored ${score} on the Advanced Action Membrane Potential Quiz! Test your neurophysiology knowledge.`;
+                const url = window.location.href;
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+            });
+            
+            document.getElementById('share-linkedin')?.addEventListener('click', function() {
+                const url = window.location.href;
+                const title = 'Advanced Action Membrane Potential Quiz';
+                const summary = 'Test your knowledge of resting and action potentials, ion channels, and clinical neurophysiology.';
+                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+            });
+            
+            document.getElementById('share-whatsapp')?.addEventListener('click', function() {
+                const score = document.getElementById('score-value').textContent;
+                const text = `I scored ${score} on the Advanced Action Membrane Potential Quiz! Test your neurophysiology knowledge: ${window.location.href}`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            });
+            
+            document.getElementById('share-copy')?.addEventListener('click', function() {
+                const score = document.getElementById('score-value').textContent;
+                const attempted = document.getElementById('attempted-value').textContent;
+                const correct = document.getElementById('correct-value').textContent;
+                const accuracy = document.getElementById('accuracy-value').textContent;
+                const text = `Advanced Action Membrane Potential Quiz Results:
+Score: ${score}
+Questions Attempted: ${attempted}
+Correct Answers: ${correct}
+Accuracy: ${accuracy}
+
+Test your knowledge of:
+• Resting membrane potential
+• Action potential generation
+• Propagation & conduction
+• Clinical applications
+• Advanced neurophysiology
+
+Take the quiz: ${window.location.href}`;
+                
+                navigator.clipboard.writeText(text).then(function() {
+                    alert('Results copied to clipboard!');
+                }, function() {
+                    alert('Failed to copy results. Please try again.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
